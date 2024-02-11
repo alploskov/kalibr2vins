@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "kalibr2vins"
+repository = "https://github.com/alploskov/kalibr2vins"
+version = "0.1.0"
+description = ""
+authors = ["Aleksey Ploskov <ploskov-ai@yandex.ru>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+        { include = "kalibr2vins" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+typer = "^0.9.0"
+pyyaml = "^6.0.1"
+
+[tool.poetry.scripts]
+kalibr2vins = "kalibr2vins:kalibr2vins"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
