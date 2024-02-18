@@ -62,7 +62,7 @@ num_of_cam: {num_of_cam}
 
 imu_topic: "{imu_topic}"
 image0_topic: "{image0_topic}"
-image1_topic: "{image0_topic}"
+image1_topic: "{image1_topic}"
 output_path: "{output_path}"
 
 cam0_calib: "{cam0_calib}"
