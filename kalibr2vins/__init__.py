@@ -5,7 +5,6 @@ from dataclasses import dataclass, asdict
 import yaml
 import typer
 import numpy as np
-from pprint import pprint
 
 from . import vins_config
 from . import cameras_templates
@@ -16,9 +15,9 @@ kalibr2vins = typer.Typer()
 def write_camera_conf(output_dir: Path, name: str, _camera_conf):
     if _camera_conf is None:
         return
-    with (output_dir / f'{name}.yaml').open('w') as cam0_file:
+    with (output_dir / f'{name}.yaml').open('w') as cam_file:
         camera_model = _camera_conf['camera_model'] + '-' + _camera_conf['distortion_model']
-        cam0_file.write(cameras_templates.TEMPLATES[camera_model].format(
+        cam_file.write(cameras_templates.TEMPLATES[camera_model].format(
             name=name,
             distortion_coeffs=_camera_conf['distortion_coeffs'],
             intrinsics=_camera_conf['intrinsics'],
@@ -34,15 +33,21 @@ def main(cameras_conf: Path = typer.Option(help="Path to file with cameras confi
     """
     output_dir.mkdir(parents=True, exist_ok=True)
     _cameras_conf = yaml.load(cameras_conf.open(), Loader=yaml.FullLoader)
-
+    _imu_conf = {}
+    if imu_conf:
+        _imu_conf = yaml.load(imu_conf.open(), Loader=yaml.FullLoader).get('imu0', {})
     write_camera_conf(output_dir, 'cam0', _cameras_conf.get('cam0'))
     write_camera_conf(output_dir, 'cam1', _cameras_conf.get('cam1'))
+
     out_conf = vins_config.Conf()
-    out_conf.image0_topic = _cameras_conf['cam0']['rostopic']
-
-    if 'cam1' in _cameras_conf:
-        out_conf.num_of_cam = 2
-        out_conf.image1_topic = _cameras_conf['cam1']['rostopic']
-
     out_conf.imu = 1 if imu_conf is not None else 0
-    print(vins_config.TMP.format(**asdict(out_conf)))
+    out_conf.num_of_cam = 2 if ('cam1' in _cameras_conf) else 1
+
+    out_conf.imu_topic = _imu_conf.get('rostopic', '')
+    out_conf.image0_topic = _cameras_conf.get('cam0', {}).get('rostopic', '')
+    out_conf.image1_topic = _cameras_conf.get('cam1', {}).get('rostopic', '')
+    out_conf.image_width = _cameras_conf.get('cam0', {}).get('resolution', [0, 0])[0]
+    out_conf.image_height = _cameras_conf.get('cam0', {}).get('resolution', [0, 0])[1]
+
+    with (output_dir / f'{output_dir.name}.yaml').open('w') as conf_file:
+        conf_file.write(vins_config.TMP.format(**asdict(out_conf)))
