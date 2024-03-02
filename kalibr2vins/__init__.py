@@ -49,5 +49,9 @@ def main(cameras_conf: Path = typer.Option(help="Path to file with cameras confi
     out_conf.image_width = _cameras_conf.get('cam0', {}).get('resolution', [0, 0])[0]
     out_conf.image_height = _cameras_conf.get('cam0', {}).get('resolution', [0, 0])[1]
 
+    if 'T_cam_imu' in  _cameras_conf.get('cam0', {}):
+        out_conf.body_T_cam0 = np.linalg.inv(np.array(_cameras_conf.get('cam0', {}).get('T_cam_imu')))
+    if 'T_cam_imu' in  _cameras_conf.get('cam1', {}):
+        out_conf.body_T_cam0 = np.linalg.inv(np.array(_cameras_conf.get('cam1', {}).get('T_cam_imu')))
     with (output_dir / f'{output_dir.name}.yaml').open('w') as conf_file:
         conf_file.write(vins_config.TMP.format(**asdict(out_conf)))
