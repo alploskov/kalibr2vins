@@ -54,4 +54,4 @@ def main(cameras_conf: Path = typer.Option(help="Path to file with cameras confi
     if 'T_cam_imu' in  _cameras_conf.get('cam1', {}):
         out_conf.body_T_cam1 = np.linalg.inv(np.array(_cameras_conf.get('cam1', {}).get('T_cam_imu')))
     with (output_dir / f'{output_dir.name}.yaml').open('w') as conf_file:
-        conf_file.write(vins_config.TMP.format(**asdict(out_conf)))
+        conf_file.write(vins_config.TMP.render(**asdict(out_conf)))
