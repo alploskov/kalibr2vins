@@ -27,7 +27,7 @@ def write_camera_conf(output_dir: Path, name: str, _camera_conf):
 @kalibr2vins.command()
 def main(cameras_conf: Path = typer.Option(help="Path to file with cameras config from kalibr. Its name usually ends with `-camchain-imucam.yaml`"),
         imu_conf: Optional[Path] = typer.Option(default=None, help="Optional path to file with imu config from kalibr. Its name usually ends with `-imu.yaml`"),
-        output_dir: Path = typer.Option(default=Path('vins_config'), help="Path to dirrectory for vins configuration.")):
+        output_dir: Path = typer.Option(Path('vins_config'), '-o', '--out', help="Path to dirrectory for vins configuration.")):
     """
     translate kalibr config to vins-fusion
     """

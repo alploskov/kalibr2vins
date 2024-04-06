@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import numpy as np
 from jinja2 import Template
 
+
 @dataclass
 class Conf:
     imu: int = 0
