@@ -17,3 +17,4 @@
 3. run `kalibr2vins --cameras-conf dataset-camchain-imucam.yaml --imu-conf dataset-imu.yaml`
 
 4. run vins-fusion with generated configuration
+    - Configs are generated in `kalibr2vins/vins_config/`
