@@ -10,7 +10,11 @@
 1. Calibrate the cameras by following this [tutorial](https://github.com/ethz-asl/kalibr/wiki/calibrating-the-vi-sensor)
 
 2. Install kalibr2vins
+    - Uses [python3-poetry](https://python-poetry.org/)
+    - `cd kalibr2vins; poetry install`
+    - Run commands in poetry shell.
 
 3. run `kalibr2vins --cameras-conf dataset-camchain-imucam.yaml --imu-conf dataset-imu.yaml`
 
 4. run vins-fusion with generated configuration
+    - Configs are generated in `kalibr2vins/vins_config/`
